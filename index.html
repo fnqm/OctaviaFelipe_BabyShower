@@ -515,7 +515,7 @@
     <div class="section-badge">💛 Wishes</div>
     <div class="section-title">Leave a Message for Renata</div>
     <p class="section-desc" style="margin:0 auto;">Write a little note, wish, or piece of advice for baby Renata. She'll treasure these someday!</p>
-    <form class="wish-form" id="wish-form" action="https://formsubmit.co/fquaassd@gmail.com" method="POST">
+    <form class="wish-form" id="wish-form" onsubmit="submitWish(event)">
       <input type="hidden" name="_subject" value="New wish for baby Renata! 🍊">
       <input type="hidden" name="_captcha" value="false">
       <input type="hidden" name="_template" value="table">
@@ -579,7 +579,26 @@
   const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.1});
   document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
   let ls=0;window.addEventListener('scroll',()=>{const c=window.scrollY;const n=document.getElementById('navbar');if(c>ls&&c>200)n.classList.add('hidden');else n.classList.remove('hidden');ls=c});
-  document.getElementById('wish-form').addEventListener('submit',function(){setTimeout(()=>{this.style.display='none';document.getElementById('wish-success').classList.add('visible')},100)});
+  function submitWish(e){
+    e.preventDefault();
+    const form=document.getElementById('wish-form');
+    const name=document.getElementById('wish-name').value.trim();
+    const msg=document.getElementById('wish-msg').value.trim();
+    if(!name||!msg)return;
+    const btn=form.querySelector('.wish-submit');
+    btn.textContent='Sending...';btn.disabled=true;
+    fetch('https://formsubmit.co/ajax/fquaassd@gmail.com',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({name:name,message:msg,_subject:'New wish for baby Renata! 🍊'})
+    }).then(r=>r.json()).then(()=>{
+      form.style.display='none';
+      document.getElementById('wish-success').classList.add('visible');
+    }).catch(()=>{
+      form.style.display='none';
+      document.getElementById('wish-success').classList.add('visible');
+    });
+  }
 </script>
 </body>
 </html>
