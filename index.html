@@ -39,8 +39,8 @@
   .lock-icon { width:80px;height:80px;margin-bottom:24px;background:linear-gradient(135deg,var(--orange),var(--orange-deep));border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(244,162,97,.3);animation:float 3s ease-in-out infinite;position:relative;z-index:2; }
   .lock-icon svg { width:36px;height:36px;fill:white; }
   @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-  .pw-title { font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.2rem);color:var(--text-dark);margin-bottom:8px;position:relative;z-index:2; }
-  .pw-subtitle { font-size:.95rem;color:var(--text-medium);margin-bottom:32px;font-weight:300;position:relative;z-index:2; }
+  .pw-title { font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.2rem);color:var(--text-dark);margin-bottom:8px;position:relative;z-index:2;text-align:center;padding:0 24px; }
+  .pw-subtitle { font-size:.95rem;color:var(--text-medium);margin-bottom:32px;font-weight:300;position:relative;z-index:2;text-align:center;padding:0 24px; }
   .pw-form { display:flex;flex-direction:column;align-items:center;gap:16px;position:relative;z-index:2; }
   .pw-input { width:280px;padding:14px 20px;border:2px solid var(--orange-light);border-radius:50px;font-family:'DM Sans',sans-serif;font-size:1rem;background:rgba(255,255,255,.9);color:var(--text-dark);outline:none;transition:border-color .3s,box-shadow .3s;text-align:center;letter-spacing:2px; }
   .pw-input::placeholder { letter-spacing:0;color:var(--text-light); }
@@ -515,15 +515,10 @@
     <div class="section-badge">💛 Wishes</div>
     <div class="section-title">Leave a Message for Renata</div>
     <p class="section-desc" style="margin:0 auto;">Write a little note, wish, or piece of advice for baby Renata. She'll treasure these someday!</p>
-    <form class="wish-form" id="wish-form" onsubmit="submitWish(event)">
-      <input type="hidden" name="_subject" value="New wish for baby Renata! 🍊">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_next" value="#">
-      <input type="text" name="_honey" style="display:none;">
+    <form class="wish-form" id="wish-form" onsubmit="return false">
       <div class="form-group"><label for="wish-name">Your Name</label><input type="text" id="wish-name" name="name" placeholder="Your name" required></div>
       <div class="form-group"><label for="wish-msg">Your Message for Renata</label><textarea id="wish-msg" name="message" placeholder="Dear Renata..." rows="4" required></textarea></div>
-      <button type="submit" class="wish-submit">Send Wish 💌</button>
+      <button type="button" class="wish-submit" onclick="submitWish()">Send Wish 💌</button>
       <p class="wish-private-note">🔒 Your message will be sent privately to Octavia & Felipe — only they will see it.</p>
     </form>
     <div class="wish-success" id="wish-success">
@@ -579,12 +574,11 @@
   const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.1});
   document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
   let ls=0;window.addEventListener('scroll',()=>{const c=window.scrollY;const n=document.getElementById('navbar');if(c>ls&&c>200)n.classList.add('hidden');else n.classList.remove('hidden');ls=c});
-  function submitWish(e){
-    e.preventDefault();
+  function submitWish(){
     const form=document.getElementById('wish-form');
     const name=document.getElementById('wish-name').value.trim();
     const msg=document.getElementById('wish-msg').value.trim();
-    if(!name||!msg)return;
+    if(!name||!msg){alert('Please fill in your name and message!');return;}
     const btn=form.querySelector('.wish-submit');
     btn.textContent='Sending...';btn.disabled=true;
     fetch('https://formsubmit.co/ajax/fquaassd@gmail.com',{
